@@ -356,4 +356,7 @@ def main():
 
     with open(args.output) as fp:
         print(f"Solution {args.output} for {args.input}")
-        print("Score: ", task_input.evaluate(fp))
+        try:
+            print("Score: ", task_input.evaluate(fp))
+        except Exception as e:
+            print("Invalid output format: ", str(e))
