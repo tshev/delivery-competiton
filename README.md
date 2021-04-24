@@ -18,3 +18,5 @@ input/A.in
 input/B.in
 input/C.in
 ```
+
+The task: [https://docs.google.com/document/d/1DdZ8yMIAQaxw4DolzUugXe4AXAAzMMMEA4KE25Hy4d8](https://docs.google.com/document/d/1DdZ8yMIAQaxw4DolzUugXe4AXAAzMMMEA4KE25Hy4d8)
