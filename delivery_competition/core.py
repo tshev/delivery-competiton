@@ -57,24 +57,28 @@ class TaskInput(object):
 
         self.order_location = order_location
         self.order_goods = order_goods
+        self.line = 1
 
     def evaluate(self, lines_o):
         lines_o = iter(lines_o)
         n = int(next(lines_o).strip())
-        assert n <= self.V
+        assert n <= self.V, f"line {LINE}"
         L = [0 for _ in range(self.R)]
         v_used = [False for x in range(self.V)]
         visited = [False for x in range(self.P)]
         total = 0
         for _ in range(n):
+            self.line += 1
             v = int(next(lines_o).strip())
-            assert not v_used[v]
+            assert not v_used[v], "A single vehicle has a single route"
             v_used[v] = True
             prev = (0, 0)
             weight = 0
+            self.line += 1
             route_length = int(next(lines_o).strip())
             goods_in_bag = collections.defaultdict(int)
             for _ in range(route_length):
+                self.line += 1
                 line = [x for x in next(lines_o).strip().split(" ")]
                 object_type = line[0]
                 loc_id = int(line[1])
@@ -90,14 +94,14 @@ class TaskInput(object):
                 if object_type == "R":
                     goods = [int(x) for x in line[3:]]
                     for i in goods:
-                        assert i < self.W
-                        assert i in self.restaurant_goods[loc_id]
+                        assert i < self.W, "Invalid product id"
+                        assert i in self.restaurant_goods[loc_id], f"Product {i} is unvailable at location {loc_id}"
                         weight += self.weights[i]
                         goods_in_bag[i] += 1
-                    assert weight <= self.vehicles[v]
+                    assert weight <= self.vehicles[v], f"Overloaded vehicle {v}"
                 else:
                     for i in self.order_goods[int(line[1])]:
-                        assert goods_in_bag[i] > 0
+                        assert goods_in_bag[i] > 0, f"Not enough required goods in the vehicle {v}"
                         weight -= self.weights[i]
                         goods_in_bag[i] -= 1
                         visited[loc_id] = True
@@ -359,4 +363,4 @@ def main():
         try:
             print("Score: ", task_input.evaluate(fp))
         except Exception as e:
-            print("Invalid output format: ", str(e))
+            print("Invalid output format: ", str(e), f"{args.output}:{task_input.line}")
